@@ -3,7 +3,7 @@
 ## NoCache
 
 ```bash
-go test -bench=BenchmarkNocache
+go test -bench=BenchmarkNoCache
 ```
 
 ```text
