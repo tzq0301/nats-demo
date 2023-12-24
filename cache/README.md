@@ -15,7 +15,7 @@ ok      cache   71.788s
 ## Redis as Cache
 
 ```bash
-go test -bench=BenchmarkRediscache
+go test -bench=BenchmarkRedisCache
 ```
 
 ```text
@@ -27,7 +27,7 @@ ok      cache   61.246s
 ## NATS as Cache
 
 ```bash
-go test -bench=BenchmarkNatscache
+go test -bench=BenchmarkNatsCache
 ```
 
 ```text
