@@ -21,6 +21,12 @@ import (
 //go:embed schema.sql
 var ddl string
 
+func TestExist(t *testing.T) {
+	testcontainers.SkipIfProviderIsNotHealthy(t)
+
+	t.Log("1")
+}
+
 func insertPosts(db *sqlx.DB) {
 	db.MustExec(ddl)
 
