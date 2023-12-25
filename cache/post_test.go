@@ -40,10 +40,6 @@ func insertPosts(db *sqlx.DB) {
 func BenchmarkNoCache(b *testing.B) {
 	ctx := context.Background()
 
-	natsContainer := must(natscontainer.RunContainer(ctx, testcontainers.WithImage("nats:2.9")))
-	nc := must(nats.Connect(must(natsContainer.ConnectionString(ctx))))
-	js := must(jetstream.New(nc))
-
 	mysqlContainer := must(mysqlcontainer.RunContainer(ctx, testcontainers.WithImage("mysql:8")))
 	db := must(sqlx.Connect("mysql", must(mysqlContainer.ConnectionString(ctx))))
 
@@ -53,15 +49,8 @@ func BenchmarkNoCache(b *testing.B) {
 		db: db,
 	}
 
-	cache := PostNatsCache{
-		kv: must(js.CreateKeyValue(ctx, jetstream.KeyValueConfig{
-			Bucket: "post",
-		})),
-	}
-
 	service := PostService{
-		repo:      &repo,
-		natsCache: &cache,
+		repo: &repo,
 	}
 
 	b.ResetTimer()
@@ -92,7 +81,8 @@ func BenchmarkNatsCache(b *testing.B) {
 
 	cache := PostNatsCache{
 		kv: must(js.CreateKeyValue(ctx, jetstream.KeyValueConfig{
-			Bucket: "post",
+			Bucket:  "post",
+			Storage: jetstream.MemoryStorage,
 		})),
 	}
 
